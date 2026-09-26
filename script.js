@@ -431,100 +431,317 @@ function showWeather() {
     document.getElementById("weatherResult");
 
 
-  const weatherData = {
+ /* =========================
+   LIVE WEATHER - OPEN METEO
+========================= */
 
-    Dhaka: {
-      icon: "🌤️",
-      temp: "31°C",
-      rain: "20%",
-      humidity: "70%"
-    },
+const cityCoordinates = {
 
-    Chattogram: {
-      icon: "🌦️",
-      temp: "30°C",
-      rain: "40%",
-      humidity: "76%"
-    },
+  Dhaka: {
+    name: "ঢাকা",
+    lat: 23.8103,
+    lon: 90.4125
+  },
 
-    Rajshahi: {
+  Chattogram: {
+    name: "চট্টগ্রাম",
+    lat: 22.3569,
+    lon: 91.7832
+  },
+
+  Rajshahi: {
+    name: "রাজশাহী",
+    lat: 24.3745,
+    lon: 88.6042
+  },
+
+  Khulna: {
+    name: "খুলনা",
+    lat: 22.8456,
+    lon: 89.5403
+  },
+
+  Sylhet: {
+    name: "সিলেট",
+    lat: 24.8949,
+    lon: 91.8687
+  },
+
+  Barishal: {
+    name: "বরিশাল",
+    lat: 22.7010,
+    lon: 90.3535
+  },
+
+  Rangpur: {
+    name: "রংপুর",
+    lat: 25.7439,
+    lon: 89.2752
+  },
+
+  Mymensingh: {
+    name: "ময়মনসিংহ",
+    lat: 24.7471,
+    lon: 90.4203
+  }
+
+};
+
+
+/* Weather code → Emoji + Bangla */
+
+function getWeatherInfo(code) {
+
+  if (code === 0) {
+    return {
       icon: "☀️",
-      temp: "33°C",
-      rain: "15%",
-      humidity: "60%"
-    },
+      text: "পরিষ্কার আকাশ"
+    };
+  }
 
-    Khulna: {
+  if (code === 1 || code === 2) {
+    return {
       icon: "🌤️",
-      temp: "32°C",
-      rain: "25%",
-      humidity: "68%"
-    },
+      text: "আংশিক মেঘলা"
+    };
+  }
 
-    Sylhet: {
+  if (code === 3) {
+    return {
+      icon: "☁️",
+      text: "মেঘলা"
+    };
+  }
+
+  if (
+    code === 45 ||
+    code === 48
+  ) {
+    return {
+      icon: "🌫️",
+      text: "কুয়াশা"
+    };
+  }
+
+  if (
+    code === 51 ||
+    code === 53 ||
+    code === 55
+  ) {
+    return {
+      icon: "🌦️",
+      text: "হালকা গুঁড়ি বৃষ্টি"
+    };
+  }
+
+  if (
+    code === 61 ||
+    code === 63 ||
+    code === 65
+  ) {
+    return {
       icon: "🌧️",
-      temp: "29°C",
-      rain: "55%",
-      humidity: "82%"
-    },
+      text: "বৃষ্টি"
+    };
+  }
 
-    Barishal: {
+  if (
+    code === 71 ||
+    code === 73 ||
+    code === 75
+  ) {
+    return {
+      icon: "❄️",
+      text: "তুষারপাত"
+    };
+  }
+
+  if (
+    code === 80 ||
+    code === 81 ||
+    code === 82
+  ) {
+    return {
       icon: "🌦️",
-      temp: "30°C",
-      rain: "45%",
-      humidity: "78%"
-    },
+      text: "বৃষ্টির ঝরনা"
+    };
+  }
 
-    Rangpur: {
-      icon: "🌤️",
-      temp: "30°C",
-      rain: "30%",
-      humidity: "72%"
-    },
+  if (
+    code === 95 ||
+    code === 96 ||
+    code === 99
+  ) {
+    return {
+      icon: "⛈️",
+      text: "বজ্রঝড়"
+    };
+  }
 
-    Mymensingh: {
-      icon: "🌦️",
-      temp: "30°C",
-      rain: "35%",
-      humidity: "74%"
-    }
-
+  return {
+    icon: "🌤️",
+    text: "আবহাওয়া"
   };
 
-
-  const data =
-    weatherData[city];
+}
 
 
-  weatherResult.innerHTML = `
+/* =========================
+   GET LIVE WEATHER
+========================= */
+
+async function showWeather() {
+
+  const city =
+    document.getElementById("city").value;
+
+  const result =
+    document.getElementById("weatherResult");
+
+  const location =
+    cityCoordinates[city];
+
+
+  /* Loading */
+
+  result.innerHTML = `
 
     <div class="weather-icon">
-      ${data.icon}
+      ⏳
     </div>
 
     <h3>
-      ${city}
+      আবহাওয়ার তথ্য নেওয়া হচ্ছে...
     </h3>
 
-    <h2>
-      ${data.temp}
-    </h2>
-
     <p>
-      🌧️ বৃষ্টির সম্ভাবনা:
-      <strong>${data.rain}</strong>
+      একটু অপেক্ষা করুন 🌱
     </p>
-
-    <p>
-      💧 আর্দ্রতা:
-      <strong>${data.humidity}</strong>
-    </p>
-
-    <div class="info">
-      ℹ️ এটি demo data।
-      বাস্তব আবহাওয়ার জন্য API যুক্ত করতে হবে।
-    </div>
 
   `;
+
+
+  try {
+
+    const url =
+      `https://api.open-meteo.com/v1/forecast` +
+      `?latitude=${location.lat}` +
+      `&longitude=${location.lon}` +
+      `&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m` +
+      `&temperature_unit=celsius` +
+      `&wind_speed_unit=kmh` +
+      `&timezone=Asia%2FDhaka`;
+
+
+    const response =
+      await fetch(url);
+
+
+    if (!response.ok) {
+      throw new Error("Weather API error");
+    }
+
+
+    const data =
+      await response.json();
+
+
+    const current =
+      data.current;
+
+
+    const weather =
+      getWeatherInfo(
+        current.weather_code
+      );
+
+
+    result.innerHTML = `
+
+      <div class="weather-icon">
+        ${weather.icon}
+      </div>
+
+      <h3>
+        ${location.name}
+      </h3>
+
+      <p>
+        ${weather.text}
+      </p>
+
+      <h2>
+        ${current.temperature_2m}°C
+      </h2>
+
+      <div class="info">
+
+        💧 আর্দ্রতা:
+        <strong>
+          ${current.relative_humidity_2m}%
+        </strong>
+
+        <br><br>
+
+        🌧️ বৃষ্টি:
+        <strong>
+          ${current.precipitation} mm
+        </strong>
+
+        <br><br>
+
+        💨 বাতাস:
+        <strong>
+          ${current.wind_speed_10m} km/h
+        </strong>
+
+      </div>
+
+      <div class="info">
+
+        🕐 আপডেট:
+        <strong>
+          ${current.time.replace("T", " ")}
+        </strong>
+
+      </div>
+
+      <p style="margin-top:15px;font-size:12px;color:#718277;">
+        Weather data by Open-Meteo
+      </p>
+
+    `;
+
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    result.innerHTML = `
+
+      <div class="weather-icon">
+        ❌
+      </div>
+
+      <h3>
+        আবহাওয়ার তথ্য পাওয়া যায়নি
+      </h3>
+
+      <p>
+        ইন্টারনেট connection check করুন
+        এবং আবার চেষ্টা করুন।
+      </p>
+
+      <button
+        onclick="showWeather()"
+        class="calculate-btn"
+      >
+        🔄 আবার চেষ্টা করুন
+      </button>
+
+    `;
+
+  }
 
 }
