@@ -1,1 +1,246 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Krishi Assistant BD 🌾</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="logo">🌾 Krishi Assistant BD</div>
+
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#crops">ফসল</a>
+    <a href="#calculator">লাভ হিসাব</a>
+    <a href="#disease">রোগ</a>
+    <a href="#calendar">ক্যালেন্ডার</a>
+    <a href="#weather">আবহাওয়া</a>
+  </nav>
+</header>
+
+
+<main>
+
+<!-- HERO -->
+<section id="home" class="hero">
+
+  <div class="hero-content">
+
+    <div class="badge">🇧🇩 বাংলাদেশের কৃষকের জন্য</div>
+
+    <h1>
+      কৃষিকাজ হোক
+      <span>আরও সহজ 🌱</span>
+    </h1>
+
+    <p>
+      ফসলের তথ্য, লাভ হিসাব, রোগের তথ্য,
+      কৃষি ক্যালেন্ডার ও আবহাওয়া — সব এক জায়গায়।
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#crops" class="btn primary">🌱 ফসল দেখুন</a>
+      <a href="#calculator" class="btn secondary">💰 লাভ হিসাব করুন</a>
+    </div>
+
+  </div>
+
+  <div class="hero-emoji">
+    🌾
+  </div>
+
+</section>
+
+
+<!-- FEATURES -->
+<section class="features">
+
+  <div class="feature-card">
+    <div>🌱</div>
+    <h3>ফসলের তথ্য</h3>
+    <p>বিভিন্ন ফসল সম্পর্কে সহজ তথ্য।</p>
+  </div>
+
+  <div class="feature-card">
+    <div>💰</div>
+    <h3>লাভ হিসাব</h3>
+    <p>খরচ ও বিক্রয় থেকে লাভ বের করুন।</p>
+  </div>
+
+  <div class="feature-card">
+    <div>🐛</div>
+    <h3>রোগ ও পোকা</h3>
+    <p>সাধারণ রোগ ও পোকার তথ্য দেখুন।</p>
+  </div>
+
+  <div class="feature-card">
+    <div>📅</div>
+    <h3>কৃষি ক্যালেন্ডার</h3>
+    <p>মাস অনুযায়ী কৃষিকাজের ধারণা।</p>
+  </div>
+
+</section>
+
+
+<!-- CROP GUIDE -->
+<section id="crops" class="section">
+
+  <div class="section-title">
+    <span>🌱</span>
+    <h2>ফসলের তথ্য</h2>
+    <p>আপনার ফসল নির্বাচন করুন</p>
+  </div>
+
+  <input
+    type="text"
+    id="cropSearch"
+    class="search"
+    placeholder="🔎 ফসল খুঁজুন..."
+  >
+
+  <div id="cropList" class="cards"></div>
+
+</section>
+
+
+<!-- CALCULATOR -->
+<section id="calculator" class="section calculator-section">
+
+  <div class="section-title">
+    <span>💰</span>
+    <h2>লাভ হিসাব করুন</h2>
+    <p>আপনার কৃষি খরচ ও বিক্রয় মূল্য লিখুন</p>
+  </div>
+
+  <div class="calculator">
+
+    <label>জমির পরিমাণ (শতক)</label>
+    <input id="land" type="number" placeholder="যেমন: 10">
+
+    <label>বীজ খরচ (৳)</label>
+    <input id="seed" type="number" placeholder="যেমন: 500">
+
+    <label>সার খরচ (৳)</label>
+    <input id="fertilizerCost" type="number" placeholder="যেমন: 1000">
+
+    <label>শ্রমিক খরচ (৳)</label>
+    <input id="labor" type="number" placeholder="যেমন: 1500">
+
+    <label>অন্যান্য খরচ (৳)</label>
+    <input id="other" type="number" placeholder="যেমন: 500">
+
+    <label>সম্ভাব্য বিক্রয় (৳)</label>
+    <input id="sale" type="number" placeholder="যেমন: 6000">
+
+    <button onclick="calculateProfit()" class="calculate-btn">
+      🧮 হিসাব করুন
+    </button>
+
+    <div id="result" class="result hidden"></div>
+
+  </div>
+
+</section>
+
+
+<!-- DISEASE -->
+<section id="disease" class="section">
+
+  <div class="section-title">
+    <span>🐛</span>
+    <h2>রোগ ও পোকা</h2>
+    <p>সাধারণ সমস্যার তথ্য</p>
+  </div>
+
+  <div id="diseaseList" class="cards"></div>
+
+</section>
+
+
+<!-- CALENDAR -->
+<section id="calendar" class="section calendar-section">
+
+  <div class="section-title">
+    <span>📅</span>
+    <h2>কৃষি ক্যালেন্ডার</h2>
+    <p>মাস অনুযায়ী সাধারণ কৃষিকাজ</p>
+  </div>
+
+  <div id="calendarList" class="calendar-grid"></div>
+
+</section>
+
+
+<!-- WEATHER -->
+<section id="weather" class="section">
+
+  <div class="section-title">
+    <span>🌦️</span>
+    <h2>আবহাওয়া</h2>
+    <p>বর্তমান আবহাওয়ার তথ্য</p>
+  </div>
+
+  <div class="weather-box">
+
+    <select id="city">
+      <option value="Dhaka">ঢাকা</option>
+      <option value="Chattogram">চট্টগ্রাম</option>
+      <option value="Rajshahi">রাজশাহী</option>
+      <option value="Khulna">খুলনা</option>
+      <option value="Sylhet">সিলেট</option>
+      <option value="Barishal">বরিশাল</option>
+      <option value="Rangpur">রংপুর</option>
+      <option value="Mymensingh">ময়মনসিংহ</option>
+    </select>
+
+    <button onclick="showWeather()" class="calculate-btn">
+      🌦️ আবহাওয়া দেখুন
+    </button>
+
+    <div id="weatherResult" class="weather-result">
+
+      <div class="weather-icon">🌤️</div>
+
+      <h3>আপনার এলাকা নির্বাচন করুন</h3>
+
+      <p>
+        আবহাওয়ার তথ্য দেখতে উপরের বাটনে ক্লিক করুন।
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+
+  <div class="footer-logo">🌾 Krishi Assistant BD</div>
+
+  <p>
+    বাংলাদেশের কৃষকের জন্য একটি সহজ digital assistant.
+  </p>
+
+  <div class="footer-line"></div>
+
+  <p>
+    Made with ❤️ in Bangladesh
+  </p>
+
+</footer>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
